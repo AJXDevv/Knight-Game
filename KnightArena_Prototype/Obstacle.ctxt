@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=Obstacle
+comment0.text=Stone\ pillars,\ crates\ and\ barrels.\ They\ block\ movement.
+comment1.params=imageName\ halfWidth\ halfHeight
+comment1.target=Obstacle(java.lang.String,\ int,\ int)
+comment2.params=
+comment2.target=int\ getHalfWidth()
+comment3.params=
+comment3.target=int\ getHalfHeight()
+numComments=4
