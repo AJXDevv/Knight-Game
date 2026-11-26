@@ -12,6 +12,8 @@ public class Slash extends Actor {
     public void act() {
         age++;
         getImage().setTransparency(Math.max(0, 240 - age * 29));
-        if (age >= 8 && getWorld() != null) getWorld().removeObject(this);
+        if (age >= 8 && getWorld() != null) {
+            getWorld().removeObject(this);
+        }
     }
 }

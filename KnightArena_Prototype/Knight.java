@@ -22,15 +22,24 @@ public class Knight extends Actor {
     }
 
     public void act() {
-        if (!(getWorld() instanceof ArenaWorld)) return;
+        if (!(getWorld() instanceof ArenaWorld)) {
+            return;
+        }
         ArenaWorld arena = (ArenaWorld) getWorld();
-        if (attackCooldown > 0) attackCooldown--;
-        if (invulnerable > 0) invulnerable--;
+        
+        if (attackCooldown > 0) {
+            attackCooldown--;    
+        }
+        if (invulnerable > 0) {
+            invulnerable--;    
+        }
+        
         moveKnight(arena);
         if (Greenfoot.isKeyDown("space") && attackCooldown == 0) {
             swordAttack(arena);
         }
-        // Flicker while immune to another touch.
+        
+        // Flickering
         getImage().setTransparency(invulnerable > 0 && invulnerable % 8 < 4 ? 130 : 255);
     }
 
@@ -57,7 +66,7 @@ public class Knight extends Actor {
     }
 
     private void swordAttack(ArenaWorld arena) {
-        attackCooldown = 28; // about half a second at Greenfoot's typical speed
+        attackCooldown = 28; // ~half a second
         int angle = (int) Math.round(Math.toDegrees(Math.atan2(faceY, faceX)));
         arena.addObject(new Slash(angle), getX(), getY());
         Greenfoot.playSound("swing.wav");
