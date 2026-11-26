@@ -17,25 +17,34 @@ public class ArenaWorld extends World {
     public ArenaWorld() {
         super(960, 600, 1);
         setBackground("arena_bg.png");
-        setPaintOrder(Hud.class, TextLabel.class, Slash.class,
-                      Knight.class, Enemy.class, Obstacle.class);
-        // These are the same three obstacle types in the design proposal.
+        setPaintOrder(Hud.class, TextLabel.class, Slash.class, Knight.class, Enemy.class, Obstacle.class);
+        
         addObject(new Obstacle("pillar.png", 23, 23), 250, 200);
         addObject(new Obstacle("pillar.png", 23, 23), 710, 402);
+        
         addObject(new Obstacle("crate.png", 23, 20), 738, 216);
         addObject(new Obstacle("crate.png", 23, 20), 228, 427);
+        
         addObject(new Obstacle("barrel.png", 19, 18), 461, 177);
         addObject(new Obstacle("barrel.png", 19, 18), 577, 464);
 
         knight = new Knight();
         addObject(knight, 480, 319);
+        
         hud = new Hud();
         addObject(hud, 480, 35);
+        
         startNextWave();
     }
 
     public void act() {
-        if (finished) return;
+        
+        // Do nothing if game is finished
+        if (finished) {
+            return;    
+        }
+        
+        // Keep wave message for some time
         if (messageTimer > 0) {
             messageTimer--;
             if (messageTimer == 0 && waveLabel != null) {
@@ -43,6 +52,8 @@ public class ArenaWorld extends World {
                 waveLabel = null;
             }
         }
+        
+        // Spawn enemies slwoly
         if (enemiesRemainingToSpawn > 0) {
             if (--spawnTimer <= 0) {
                 spawnEnemy();
@@ -51,6 +62,7 @@ public class ArenaWorld extends World {
             }
             return;
         }
+        
         // Once all enemies in the current wave are gone, start a short countdown.
         List<Enemy> enemies = getObjects(Enemy.class);
         if (!enemies.isEmpty()) {
@@ -66,12 +78,14 @@ public class ArenaWorld extends World {
 
     private void startNextWave() {
         wave++;
-        enemiesRemainingToSpawn = 2 + wave * 2; // 4 / 6 / 8 / 10 / 12
+        enemiesRemainingToSpawn = 2 + (wave * 2); // 4 / 6 / 8 / 10 / 12
         spawnTimer = 65;
         betweenWaves = 120;
-        if (waveLabel != null) removeObject(waveLabel);
-        waveLabel = new TextLabel("WAVE " + wave, 38,
-                 new Color(250, 223, 164));
+        
+        if (waveLabel != null) {
+            removeObject(waveLabel);   
+        }
+        waveLabel = new TextLabel("WAVE " + wave, 38, new Color(250, 223, 164));
         addObject(waveLabel, 480, 121);
         messageTimer = 92;
     }
@@ -81,28 +95,48 @@ public class ArenaWorld extends World {
         int y = 110;
         for (int tries = 0; tries < 25; tries++) {
             int side = Greenfoot.getRandomNumber(4);
-            if (side == 0) { x = 105 + Greenfoot.getRandomNumber(750); y = 118; }
-            if (side == 1) { x = 105 + Greenfoot.getRandomNumber(750); y = 524; }
-            if (side == 2) { x = 100; y = 122 + Greenfoot.getRandomNumber(391); }
-            if (side == 3) { x = 858; y = 122 + Greenfoot.getRandomNumber(391); }
+            if (side == 0) { 
+                x = 105 + Greenfoot.getRandomNumber(750); y = 118; 
+            }
+            if (side == 1) { 
+                x = 105 + Greenfoot.getRandomNumber(750); y = 524; 
+            }
+            if (side == 2) {
+                x = 100; y = 122 + Greenfoot.getRandomNumber(391); 
+            }
+            if (side == 3) { 
+                x = 858; y = 122 + Greenfoot.getRandomNumber(391); 
+            }
+            
             int dx = x - knight.getX();
             int dy = y - knight.getY();
-            if (dx * dx + dy * dy > 175 * 175 && canOccupy(x, y, 18)) break;
+            if (dx * dx + dy * dy > 175 * 175 && canOccupy(x, y, 18)) {
+                break;   
+            }
         }
-        boolean fast = wave >= 3 && Greenfoot.getRandomNumber(100) < 25 + 5 * (wave - 3);
+
+        /*
+         * Higher wave = more chance for fast enemy.
+         * Wave 3: 25% / Wave 4: 30% / Wave 5: 35%
+         */
+        boolean fast = (wave >= 3) && Greenfoot.getRandomNumber(100) < (25 + (5 * (wave - 3)));
+        
         addObject(new Enemy(fast), x, y);
     }
 
-    /** Shared collision rule for both the knight and its enemies. */
+    /** Shared collision for knight and enemies. */
     public boolean canOccupy(double x, double y, int radius) {
-        if (x < 75 + radius || x > 885 - radius
-                || y < 104 + radius || y > 530 - radius) return false;
+        if (x < 75 + radius || x > 885 - radius || y < 104 + radius || y > 530 - radius) {
+            return false;
+        }
+        
         for (Obstacle obstacle : getObjects(Obstacle.class)) {
             if (Math.abs(x - obstacle.getX()) < obstacle.getHalfWidth() + radius
                 && Math.abs(y - obstacle.getY()) < obstacle.getHalfHeight() + radius) {
                 return false;
             }
         }
+        
         return true;
     }
 
@@ -124,14 +158,27 @@ public class ArenaWorld extends World {
     }
 
     public void finish(boolean victory) {
-        if (finished) return;
+        if (finished) {
+            return;
+        }
+        
         finished = true;
-        if (victory) Greenfoot.playSound("win.wav");
+        if (victory) {
+            Greenfoot.playSound("win.wav");   
+        }
         int cleared = victory ? 5 : wave - 1;
         Greenfoot.setWorld(new EndWorld(victory, score, Math.max(0, cleared)));
     }
 
-    public Knight getKnight() { return knight; }
-    public int getScore() { return score; }
-    public int getWave() { return wave; }
+    public Knight getKnight() { 
+        return knight;
+    }
+    
+    public int getScore() { 
+        return score; 
+    }
+    
+    public int getWave() { 
+        return wave; 
+    }
 }
