@@ -37,10 +37,3 @@ TextLabel.java ....... UI text
 images/ .............. original PNG art for the game
 sounds/ .............. original WAV effects
 project.greenfoot .... Greenfoot project metadata
-
-PROTOTYPE NOTES
-- Matches the core mechanics of the uploaded game proposal and design document.
-- Artwork and sounds were created specifically for this sample.
-- This project has not been run inside the desktop Greenfoot application
-  here. Open it in Greenfoot and test locally before presenting/submitting.
-- Prototype scope: no music, advanced pathfinding or multiple levels.
