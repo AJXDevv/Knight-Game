@@ -13,6 +13,8 @@ public class ArenaWorld extends World {
     private int messageTimer = 0;
     private TextLabel waveLabel;
     private boolean finished = false;
+    
+    private final WaveManager waves = new WaveManager();
 
     public ArenaWorld() {
         super(960, 600, 1);
@@ -68,7 +70,7 @@ public class ArenaWorld extends World {
         if (!enemies.isEmpty()) {
             betweenWaves = 120;
         } else if (--betweenWaves <= 0) {
-            if (wave >= 5) {
+            if (wave >= WaveManager.TOTAL_WAVES) {
                 finish(true);
             } else {
                 startNextWave();
@@ -78,7 +80,7 @@ public class ArenaWorld extends World {
 
     private void startNextWave() {
         wave++;
-        enemiesRemainingToSpawn = 2 + (wave * 2); // 4 / 6 / 8 / 10 / 12
+        enemiesRemainingToSpawn = waves.getEnemyCount(wave);
         spawnTimer = 65;
         betweenWaves = 120;
         
@@ -115,13 +117,7 @@ public class ArenaWorld extends World {
             }
         }
 
-        /*
-         * Higher wave = more chance for fast enemy.
-         * Wave 3: 25% / Wave 4: 30% / Wave 5: 35%
-         */
-        boolean fast = (wave >= 3) && Greenfoot.getRandomNumber(100) < (25 + (5 * (wave - 3)));
-        
-        addObject(new Enemy(fast), x, y);
+        addObject(waves.createEnemy(wave), x, y);
     }
 
     /** Shared collision for knight and enemies. */
@@ -147,13 +143,13 @@ public class ArenaWorld extends World {
             double dy = enemy.getY() - y;
             double dist = Math.sqrt(dx * dx + dy * dy);
             if (dist <= 83 && dist > 1 && (dx * faceX + dy * faceY) / dist >= 0.15) {
-                enemy.takeHit();
+                enemy.takeHit(1);
             }
         }
     }
 
     public void enemyDefeated(Enemy enemy) {
-        score += 100;
+        score += enemy.getPoints();
         removeObject(enemy);
     }
 
@@ -166,7 +162,7 @@ public class ArenaWorld extends World {
         if (victory) {
             Greenfoot.playSound("win.wav");   
         }
-        int cleared = victory ? 5 : wave - 1;
+        int cleared = victory ? WaveManager.TOTAL_WAVES : wave - 1;
         Greenfoot.setWorld(new EndWorld(victory, score, Math.max(0, cleared)));
     }
 

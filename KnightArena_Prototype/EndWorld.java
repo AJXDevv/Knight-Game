@@ -11,7 +11,7 @@ public class EndWorld extends World {
         addObject(new TextLabel(title, 57, titleColor), 480, 155);
         
         addObject(new TextLabel("FINAL SCORE   " + score, 30, new Color(240, 236, 215)), 480, 263);
-        addObject(new TextLabel("WAVES CLEARED   " + wavesCleared + " / 5", 22,
+        addObject(new TextLabel("WAVES CLEARED   " + wavesCleared + " / " + WaveManager.TOTAL_WAVES, 22,
             new Color(181, 208, 211)), 480, 315);
             
         addObject(new MenuButton("again"), 480, 375);
