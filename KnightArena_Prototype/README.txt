@@ -1,4 +1,4 @@
-KNIGHT ARENA — GREENFOOT PROTOTYPE
+KNIGHT ARENA - GREENFOOT PROTOTYPE
 Game Programming 1 / 420-141-VA
 
 OPEN THE GAME
@@ -25,15 +25,22 @@ Defeating the final wave displays Victory.
 FILES
 MenuWorld.java ....... game start screen
 HelpWorld.java ....... controls / instructions
-ArenaWorld.java ...... waves, enemy spawning, collisions, scoring
+ArenaWorld.java ...... wave timing, enemy spawning, collisions, scoring
+WaveManager.java ..... wave rules (number of waves, enemies per wave, enemy types)
 Knight.java .......... movement, sword swings, health
-Enemy.java ........... enemy AI and damage
+Enemy.java ........... base class for all enemies (chasing, damage, taking hits)
+BasicEnemy.java ...... red enemy (2 hits, normal speed)
+FastEnemy.java ....... purple enemy (1 hit, fast)
 Obstacle.java ........ solid obstacle objects
 Slash.java ........... sword swing animation
 Hud.java ............. health, wave, score display
 EndWorld.java ........ win/loss screen
-MenuButton.java ...... menu interactions
+MenuButton.java ...... clickable button (draws itself, no images needed)
 TextLabel.java ....... UI text
-images/ .............. original PNG art for the game
-sounds/ .............. original WAV effects
+images/ .............. PNG art for the game
+sounds/ .............. WAV effects
 project.greenfoot .... Greenfoot project metadata
+
+ADDING THINGS LATER
+New enemy ........ make a new subclass of Enemy, then add it in WaveManager.createEnemy()
+More waves ....... change TOTAL_WAVES in WaveManager.java
