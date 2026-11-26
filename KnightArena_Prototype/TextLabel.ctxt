@@ -1,6 +1,0 @@
-#BlueJ class context
-comment0.target=TextLabel
-comment0.text=Simple\ non-clickable\ text\ actor.
-comment1.params=text\ size\ color
-comment1.target=TextLabel(java.lang.String,\ int,\ greenfoot.Color)
-numComments=2
